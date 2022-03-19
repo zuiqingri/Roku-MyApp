@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<component name="VideoNode" extends="ContentNode">
+  <interface>
+    <field id="inFavorites" type="boolean" />
+    <field id="on_Air" type="boolean" />
+    <field id="contentId" type="string" />
+    <field id="mediaType" type="string" />
+    <field id="posterThumbnail" type="string" />
+    <field id="usePoster" type="boolean" />
+
+    <field id="start" type="string" />
+    <field id="end" type="string" />
+
+
+
+
+    <field id="subscriptionRequired" type="boolean" />
+    <field id="purchaseRequired" type="boolean" />
+    <field id="rentalRequired" type="boolean" />
+    <field id="passRequired" type="boolean" />
+    <field id="registrationRequired" type="boolean" />
+    <field id="marketplace_ids" type="assocarray" />
+    <field id="episodeNumber" type="integer" />
+    <field id="seasonNumber" type="integer" />
+
+    <field id="created_at" type="string" />
+    <field id="published_at" type="string" />
+    <field id="updated_at" type="string" />
+    <field id="keywords" type="array" />
+
+    <field id="trailers" type="array" />
+
+    <!-- Associated in-store product (if tvod) -->
+    <field id="storeProduct" type="assocarray" />
+
+    <!-- for pagination -->
+    <field id="isPaginator" type="boolean" />
+    <field id="nextPage" type="integer" />
+
+  </interface>
+</component>

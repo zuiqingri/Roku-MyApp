@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--********** Copyright 2016 Roku Corp.  All Rights Reserved. **********-->
+
+<!-- node that renders Grid Screen
+    handles bookmark buttons
+    handles start of video playback
+ -->
+<component name="GridScreen" extends="Group" initialFocus="RowList" xsi:noNamespaceSchemaLocation="http://rokudev.roku.com/rokudev/schema/RokuSceneGraph.xsd">
+    <interface>
+        <!-- Grid Content Node -->
+        <field id="content" type="node" alias="RowList.content" onChange="onContentChange"/>
+
+        <!-- Item Selected -->
+        <!-- <field id="itemSelected" type="integer" alwaysnotify="true" alias="sliderButton.itemSelected" onChange="onItemSelected" /> -->
+
+        <field id="itemSelectedRole" type="string" />
+        <field id="itemSelectedTarget" type="string" />
+
+        <!-- herCarousel Content Data -->
+        <field id="heroCarouselData" type="array" onChange="showHeroCarousel"/>
+
+        <!-- herCarousel Data to be shown or not -->
+        <field id="heroCarouselShow" type="bool" />
+        <field id="moveFocusToheroCarousel" type="bool" onChange="moveFocusToheroCarousel" />
+
+
+
+        <!-- Row item selection handler -->
+        <field id="rowItemSelected" type="intarray" alwaysnotify="true" alias="RowList.rowItemSelected"/>
+
+        <!-- Row item focused handler -->
+        <field id="itemFocused" type="intarray" alias="RowList.rowItemFocused" onChange="OnItemFocused"/>
+
+        <!-- Interface to focused item (Content Node) -->
+        <field id="focusedContent"  type="node"/>
+
+        <!--Interface to handle heroCarousel selection-->
+        <field id="carouselSelectData" type="assocArray"  />
+
+        <!-- True value will immediately play the video loaded into the screen -->
+        <field id="triggerPlay" type="bool" />
+        <field id="canWatchVideo" type="bool" />
+
+        <!-- Gets populated by app configuration returned from zype API -->
+        <field id="autoplay" type="bool" />
+
+        <!-- Video Player referencible by HomeScene -->
+        <field id="VideoPlayer" type="node" />
+
+        <field id="RemakeVideoPlayer" type="bool" alwaysNotify="true" onChange="ReinitializeVideoPlayer" />
+    </interface>
+
+    <!-- main handler -->
+    <script type="text/brightscript" uri="pkg:/components/screens/GridScreen/GridScreen.brs" />
+
+
+    <children>
+        <Timer id="tVideoHeartBeatTimer" repeat="true"/>
+
+
+        <!-- Overhang logo -->
+
+        <Group id="carouselShow" visible="false">
+            <FadingBackground
+            id="Background"
+            width="1280"
+            height="720"
+            color="0x151515"
+            ShadeOpacity="0.8" />
+            <Group id="Overhang">
+                <Poster
+                    id="PosterOverhang"
+                    translation="[100, 30]"
+                    loadwidth="500"
+                    loadheight="100"
+                    loadDisplayMode="scaleToFit"
+                    uri="pkg:/images/overhangLogo.png" />
+
+                <Label
+                    id="OptionsLabel"
+                    translation="[126, 58]"
+                    width="400"
+                    horizAlign="right"
+                    text="Options"
+                    color="0xf5f5f5">
+                    <Font role="font" uri="pkg:/fonts/Roboto-Regular.ttf" size="21" />
+                </Label>
+
+                <Poster
+                    id="OptionsIcon"
+                    blendColor="#ffffff"
+                    enableColorBlending="false"
+                    translation="[539, 53]"
+                    width="24"
+                    height="24"
+                    uri="pkg:/images/options.png" />
+            </Group>
+
+            <Poster
+                id="BackgroundDown"
+                translation="[0, 650]"
+                width="2000"
+                height="95" />
+
+            <Description
+                id="Description"
+                translation="[106, 140]"
+                itemSpacings="[7,17]" />
+        </Group>
+
+        <Group id="sliderGroup">
+            <button id="sliderButton"
+            focusBitmapUri="pkg:/images/tra.png"
+            iconUri="pkg:/images/tra.png"
+            focusedIconUri="pkg:/images/tra.png"/>
+
+            <Poster id="sliderFocus"/>
+            <Poster id="slider1"/>
+            <Poster id="slider2"/>
+            <Poster id="slider3"/>
+
+            <Timer id="sliderTimer" duration="10" repeat="true"/>
+        </Group>
+
+           <!-- Custom fonts -->
+        <Label>
+            <Font id="RowListFont" role="font" uri="pkg:/fonts/Roboto-Regular.ttf" size="18"/>
+        </Label>
+
+        <RowList
+            id="RowList"
+            itemComponentName="GridScreenItem"
+            focusBitmapUri="pkg:/images/focus_grid_light.9.png"
+            translation="[-60, 410]"
+            itemSize="[1327, 262]"
+            numRows="2"
+            itemSpacing="[0,0]"
+            rowSpacings="[0]"
+            focusXOffset="[147]"
+            rowFocusAnimationStyle="fixedFocusWrap"
+            rowItemSize="[[262, 147]]"
+            rowItemSpacing="[[16, 3]]"
+            showRowLabel="true"
+            showRowCounter="true"
+            rowLabelOffset="[[147, 20]]"
+            rowLabelFont="dictionary:RowListFont"
+            rowLabelColor="0xf5f5f5" />
+    </children>
+</component>

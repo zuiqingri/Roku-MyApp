@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--********** Copyright 2016 Roku Corp.  All Rights Reserved. **********-->
+
+<!--
+    main node which handles home screen children
+    -->
+<component name="HomeScene" extends="Scene" xsi:noNamespaceSchemaLocation="http://rokudev.roku.com/rokudev/schema/RokuSceneGraph.xsd">
+
+    <!-- Segment Analytics Connector path -->
+    <script type="text/brightscript" uri="pkg:/source/analytics/SegmentAnalyticsConnector.brs" />
+
+    <interface>
+        <field id="myVideosArray" type="assocArray"  />
+        <field id="allDataReceived" type="boolean" alwaysNotify="true" value="false"/>
+
+        <field id="uniqueSessionID" type="string" alwaysnotify="true"/>
+
+
+        <!--Interface to handle app launch complete event for sending beacon to Roku-->
+        <field id="sentLaunchCompleteEvent" type="boolean" alwaysNotify="true" onChange="sendAppLaunchCompleteBeacon" />
+
+
+        <!-- Content for RowList in GridScreen on Home Scene -->
+        <field id="gridContent" type="node" alias="GridScreen.content" onChange="OnChangeContent" alwaysNotify="true"/>
+
+        <field id="loadingIndicator" type="node" />
+        <!--Content for HeroCarousel on Home Scene-->
+        <field id="heroCarouselData" type="array" alias="GridScreen.heroCarouselData" alwaysNotify="true"/>
+        <field id="IsShowAutoPlayBackground" type="boolean" alias="autoPlayBackground.visible" alwaysNotify="true" onChange="onAutoPlayBgChange"/>
+
+        <!-- Content for RowList in Search -->
+        <field id="searchContent" type="node" alias="Search.content"/>
+
+        <!-- Content for RowList in Favorites -->
+        <field id="favoritesContent" type="node" alias="Favorites.content"/>
+
+        <!-- Content for RowList in Favorites -->
+        <field id="myLibraryContent" type="node" alias="MyLibrary.content"/>
+
+        <!-- Custom Selection Boolean Interface -->
+        <field id="playlistItemSelected" type="boolean" value="false" alwaysNotify="true"/>
+
+        <!-- Row item selection handler -->
+        <field id="rowItemSelected" type="intarray" alwaysNotify="true" alias="GridScreen.rowItemSelected"/>
+
+        <!-- Row item focus handler -->
+        <field id="rowItemFocused" type="intarray" alwaysNotify="true" alias="GridScreen.itemFocused"/>
+
+        <!--Interface to handle heroCarousel selection-->
+        <field id="carouselSelectData" type="assocArray" alias="GridScreen.carouselSelectData" onChange="carouselSelectDataSelected"/>
+
+        <field id="DeepLinkToDetailPage" type="node" onChange="CarouselDeepLinkToDetailPage"/>
+
+
+
+        <field id="SearchString" type="string" alwaysnotify="true" alias="Search.SearchString"/>
+
+        <field id="ResultsText" type="string" alwaysnotify="true" alias="Search.ResultsText"/>
+
+        <field id="SearchVideoTitle" type="string" alwaysnotify="true" alias="Search.VideoTitleText"/>
+
+        <field id="FavoritesVideoTitle" type="string" alwaysnotify="true" alias="Favorites.VideoTitleText"/>
+
+        <field id="deepLinkedID" type="string" onChange="OnDeepLink"/>
+
+        <field id="TriggerDeviceUnlink" type="bool" />
+
+        <field id="videoliststack" type="array"  />
+
+        <field id="autoplaytimer" type="integer" alwaysnotify="true" onChange="SetAutoPlayTimer" />
+
+        <!-- Name of screen to transition to -->
+        <field id="transitionTo" type="string" alwaysNotify="true" onChange="transitionToScreen" />
+
+        <field id="goBackToNonAuth" type="boolean" alwaysNotify="true" onChange="goBackToNonAuthCallback" />
+
+        <function name="GetPlaylistVideosFunc" />
+
+        <function name="AddCurrentPositionToTracker" />
+        <function name="PushScreenIntoScreenStack" />
+        <function name="PushContentIntoContentStack" />
+        <function name="CreateDialog" />
+        <field id="segmentEvent" type="assocArray" onChange="onSegmentEventChanged"/>
+    </interface>
+
+    <!-- main handler -->
+    <script type="text/brightscript" uri="pkg:/components/screens/HomeScene/HomeScene.brs" />
+    <script type="text/brightscript" uri="pkg:/source/helpers.brs" />
+
+    <children>
+
+        <!-- Segment Analytics Task -->
+        <SegmentAnalyticsTask id="libraryTask"/>
+
+        <!-- Grid Screen with RowList on Home Scene -->
+        <GridScreen
+            id="GridScreen"
+            visible="true"
+            translation="[0,0]" />
+
+        <!-- Details Screen with Play button -->
+        <DetailsScreen
+            id="DetailsScreen"
+            visible="false"/>
+
+        <!--Menu screen.-->
+        <Menu
+            id="Menu"
+            visible="false"/>
+
+        <!-- Device Linking screen -->
+        <DeviceLinking
+            id="DeviceLinking"
+            visible="false"
+            />
+
+        <!-- Loading Screen -->
+        <LoadingScreen
+            id="LoadingScreen"
+            visible="false"
+            />
+
+        <!--Search screen.-->
+        <Search
+            id="Search"
+            visible="false"/>
+
+        <EPGScreen id="EPGScreen" visible="false" />
+
+        <!--Search screen.-->
+        <Favorites
+            id="Favorites"
+            visible="false"/>
+
+        <!--Info screen.-->
+        <InfoScreen
+            id="InfoScreen"
+            visible="false"/>
+
+        <!-- Auth selection screen - choose native svod purchase + signup or oauth -->
+        <AuthSelection
+          id="AuthSelection"
+          visible="false" />
+
+        <!-- Purchase Screen - Confirm purchase + signup or oauth -->
+        <PurchaseScreen
+          id="PurchaseScreen"
+          visible="false" />
+
+        <!-- OAuth selection - choose signin / device link -->
+        <UniversalAuthSelection
+          id="UniversalAuthSelection"
+          visible="false" />
+
+        <!-- Sign In Screen -->
+        <CredentialsInput
+          id="SignInScreen"
+          visible="false" />
+
+        <!-- Sign Up Screen -->
+        <CredentialsInput
+          id="SignUpScreen"
+          visible="false" />
+
+        <!-- Registration Screen -->
+        <CredentialsInput
+          id="RegistrationScreen"
+          isRegister="true"
+          visible="false" />
+
+        <!-- Account Screen - shows signin / signout button -->
+        <AccountScreen
+          id="AccountScreen"
+          visible="false" />
+
+        <TestInfoScreen
+          id="TestInfoScreen"
+          visible="false" />
+
+        <!-- My Library - only with universal_tvod -->
+        <MyLibrary
+            id="MyLibrary"
+            visible="false"/>
+
+        <!-- Font for loading indicator -->
+        <Label>
+            <Font id="loadingIndicatorFont" role="font" uri="pkg:/fonts/Roboto-Regular.ttf" size="16"/>
+        </Label>
+
+        <rectangle
+          id="autoPlayBackground"
+          width="1280"
+          height="720"
+          color="#FFFFFF"
+          visible="false"
+          />
+        <LoadingIndicator
+          id="loadingIndicator"
+          imageUri="pkg:/components/screens/LoadingIndicator/lightLoader.png"
+          clockwise="true"
+          spinInterval="2"
+          fadeInterval="0.5"
+          spacing="20"
+          imageWidth="100"
+          text=""
+          width="1280"
+          height="720"
+          centered="false"
+          translation="[0, 0]"
+          textPadding="10"
+          font="dictionary:loadingIndicatorFont"
+          backgroundColor="0x151515"
+          backgroundOpacity="0"/>
+
+        <!-- Timer to hide autoplay message -->
+        <Timer id="autoplayMessageTimer" repeat="false" duration="5" />
+    </children>
+</component>

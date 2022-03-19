@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--********** Copyright 2016 Roku Corp.  All Rights Reserved. **********-->
+
+<!-- Description
+FadingBackground - Background for all nodes. It is basically poster that gets picture Url from HDBackgroundImageUrl field of content meta-data of current focused item. Between switching uri, starts animation with fading out old image and fading in new picture after loading.-->
+
+<component name="FadingBackground" extends="Rectangle" xsi:noNamespaceSchemaLocation="http://rokudev.roku.com/rokudev/schema/RokuSceneGraph.xsd">
+
+    <interface>
+        <!--Uri of image.-->
+        <field id="uri"    type="string"   onChange="OnBackgroundUriChange"/>
+
+        <!--Set color of background while image is loading.-->
+        <field id="ShadeOpacity"  type="float" alias="shade.opacity"/>
+    </interface>
+
+    <!-- main handler -->
+    <script type="text/brightscript" uri="pkg:/components/screens/FadingBackground/FadingBackground.brs" />
+    <script type="text/brightscript" uri="pkg:/source/helpers.brs" />
+
+    <children>
+        <Rectangle
+            id="AppBackground"
+            color="0x151515"
+            width="1280"
+            height="720"
+            translation="[0,0]" />
+        <Rectangle
+            id="backgroundColor"/>
+        <Poster
+            id="oldBackground"
+            width="680"
+            height="381" loadWidth="680" loadHeight="381" loadDisplayMode="scaleToFit"
+            translation="[600,0]" />
+        <Poster
+            id="background"
+            width="680"
+            height="381" loadWidth="680" loadHeight="381" loadDisplayMode="scaleToFit"
+            translation="[600,0]" />
+        <Rectangle
+            id="shade"
+            color="0x151515"
+            opacity="0.65"/>
+
+        <!-- Gradient Balck Overlay -->
+        <Poster
+            id="thumbOverlay-details"
+            width="1280"
+            height="720"
+            Loadwidth="1280"
+            Loadheight="720"
+            loadDisplayMode="scaleToZoom"
+            uri="pkg:/images/blackOverlay.png"
+            translation="[0, 0]"
+        />
+
+        <Animation
+            id="fadeoutAnimation"
+            repeat="false"
+            duration="0.5">
+            <FloatFieldInterpolator
+                id="oldbackgroundInterpolator"
+                key="[0.0, 1.0]"
+                keyValue="[1.0, 0.0]"
+                fieldToInterp="oldBackground.opacity"/>
+        </Animation>
+
+        <Animation
+            id="fadeinAnimation"
+            repeat="false"
+            easeFunction="linear"
+            duration="0.5">
+            <FloatFieldInterpolator
+                id="backgroundInterpolator"
+                key="[0.0, 1.0]"
+                keyValue="[0.0, 1.0]"
+                fieldToInterp="background.opacity"/>
+        </Animation>
+    </children>
+</component>

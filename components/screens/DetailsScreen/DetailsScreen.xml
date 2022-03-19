@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--********** Copyright 2016 Roku Corp.  All Rights Reserved. **********-->
+
+<!--
+    node that renders details screen
+    handles start of video playback
+ -->
+<component name="DetailsScreen" extends="Group" initialFocus="Buttons" xsi:noNamespaceSchemaLocation="http://rokudev.roku.com/rokudev/schema/RokuSceneGraph.xsd">
+
+    <interface>
+        <!-- Button press handler -->
+        <field id="itemSelected" type="integer" alwaysnotify="true" alias="Buttons.itemSelected" onChange="onItemSelected" />
+
+        <field id="itemSelectedRole" type="string" />
+        <field id="itemSelectedTarget" type="string" />
+
+        <!-- Playback flag -->
+        <field id="videoPlayerVisible" type="bool" alwaysnotify="true" onChange="onVideoVisibleChange" />
+
+        <!-- Content fields -->
+        <field id="content" type="node" alwaysnotify="true" onChange="OnContentChange" />
+
+        <field id="IsOptionsLabelVisible" type="bool" alias="Optionslabel.visible"/>
+
+
+		<!-- Resume video task node -->
+		<field id="ResumeVideo" type="node" />
+
+
+        <field id="dataArray" type="roArray" />
+
+        <field id="videosTree" type="roArray" />
+
+        <!-- True value will immediately play the video loaded into the screen -->
+        <field id="triggerPlay" type="bool" />
+        <field id="canWatchVideo" type="bool" />
+
+        <!-- Gets populated by app configuration returned from zype API -->
+        <field id="autoplay" type="bool" />
+
+        <!-- Video Player referencible by HomeScene -->
+        <field id="VideoPlayer" type="node" />
+        <field id="rowTVODInitiateContent" type="node" />
+
+        <field id="RemakeVideoPlayer" type="bool" alwaysNotify="true" onChange="ReinitializeVideoPlayer" />
+
+        <field id="PlaylistRowIndex" type="integer" />
+        <field id="CurrentVideoIndex" type="integer" />
+        <field id="totalVideosCount" type="integer" />
+
+        <function name="currentButtonSelected" />
+    </interface>
+
+    <!-- helpers -->
+    <script type="text/brightscript" uri="pkg:/source/helpers/content_helpers.brs" />
+    <!-- main handler -->
+    <script type="text/brightscript" uri="pkg:/components/screens/DetailsScreen/DetailsScreen.brs" />
+
+    <children>
+        <Timer id="tVideoHeartBeatTimer" repeat="true"/>
+
+        <!-- Main Background -->
+        <Rectangle
+            id="AppBackground"
+            color="0x151515"
+            width="1280"
+            height="720"
+            translation="[0,0]" />
+
+        <!--Background poster.-->
+        <Poster
+            id="Background"
+            width="775"
+            height="435"
+            translation="[555,0]"
+            />
+
+        <!-- Gradient Balck Overlay -->
+        <Poster
+            id="thumbOverlay-details"
+            width="1280"
+            height="720"
+            Loadwidth="1280"
+            Loadheight="720"
+            loadDisplayMode="scaleToZoom"
+            uri="pkg:/images/blackOverlay.png"
+            translation="[0, 0]"
+        />
+
+        <!-- Custom fonts -->
+        <Label>
+            <Font id="ButtonFont" role="font" uri="pkg:/fonts/Roboto-Regular.ttf" size="22"/>
+        </Label>
+
+        <!--Control buttons.-->
+        <LabelList
+            id="Buttons"
+            translation="[106,500]"
+            color="0xf5f5f5"
+            focusedColor="0xf5f5f5"
+            numRows="5"
+            vertFocusAnimationStyle="floatingFocus"
+            itemSize="[350, 45]"
+            textHorizAlign="center"
+            font="dictionary:ButtonFont"
+            focusedFont="dictionary:ButtonFont"
+            focusBitmapUri="pkg:/images/button-focus-light.png"
+            />
+        <LabelList
+            id="SubscriptionButtons"
+            translation="[106,550]"
+            color="0xf5f5f5"
+            focusedColor="0xf5f5f5"
+            numRows="5"
+            vertFocusAnimationStyle="floatingFocus"
+            itemSize="[350, 45]"
+            textHorizAlign="center"
+            font="dictionary:ButtonFont"
+            focusedFont="dictionary:ButtonFont"
+            focusBitmapUri="pkg:/images/button-focus-light.png"
+            />
+
+        <!--Item description.-->
+        <Description
+            id="Description"
+            translation="[106, 140]"
+            itemSpacings="[7,17]" />
+
+        <!-- Overhang -->
+        <Group
+            id="Overhang">
+            <Poster
+               id="PosterOverhang"
+               translation="[100, 30]"
+               loadwidth="500"
+               loadheight="100"
+               loadDisplayMode="scaleToFit"
+               uri="pkg:/images/overhangLogo.png" />
+           <Group
+               id="Optionslabel">
+           <Label
+               id="OptionsText"
+               translation="[126, 58]"
+               width="400"
+               horizAlign="right"
+               text="Options"
+               color="0xf5f5f5">
+               <Font role="font" uri="pkg:/fonts/Roboto-Regular.ttf" size="21" />
+            </Label>
+
+           <Poster id="OptionsIcon"
+               blendColor="#ffffff"
+               enableColorBlending="false"
+               translation="[539, 53]"
+               width="24"
+               height="24"
+               uri="pkg:/images/options.png"/>
+           </Group>
+        </Group>
+
+    </children>
+</component>

@@ -1,0 +1,4 @@
+APPNAME = 5ef382f87812fa0001eee61f1593017280
+VERSION = 1.0
+
+include app.mk

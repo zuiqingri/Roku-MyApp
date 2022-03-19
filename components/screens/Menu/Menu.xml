@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--********** Copyright 2016 Zype.  All Rights Reserved. **********-->
+
+<!--
+    node - menu
+-->
+<component name="Menu" extends="Group" initialFocus="MenuButtons">
+    <interface>
+        <!-- Button press handler -->
+        <field id="itemSelected" type="integer" alwaysnotify="true" alias="MenuButtons.itemSelected" onChange="onItemSelected" />
+        <field id="itemSelectedRole" type="string" />
+        <field id="itemSelectedTarget" type="string" />
+
+        <field id="isDeviceLinkingEnabled" type="bool" onChange="InitSidebarButtons"/>
+    </interface>
+
+    <!-- main handler -->
+    <script type="text/brightscript" uri="pkg:/source/helpers/content_helpers.brs" />
+    <script type="text/brightscript" uri="pkg:/components/screens/Menu/Menu.brs" />
+
+    <children>
+        <!-- Custom fonts -->
+        <Label>
+            <Font id="MenuFont" role="font" uri="pkg:/fonts/Roboto-Regular.ttf" size="22"/>
+        </Label>
+
+        <!-- Background Shade -->
+        <Rectangle
+            id="Shade"
+            width="600"
+            height="720"
+            color="0x151515"
+            opacity="0.8"
+            translation="[700,0]"
+            />
+
+        <!-- Menu buttons -->
+        <LabelList
+            id="MenuButtons"
+            translation="[800,120]"
+            color="0xf5f5f5"
+            focusedColor="0xf5f5f5"
+            numRows="6"
+            vertFocusAnimationStyle="floatingFocus"
+            itemSize="[300, 35]"
+            font="dictionary:MenuFont"
+            textHorizAlign="center"
+            focusedFont="dictionary:MenuFont"
+            focusBitmapUri="pkg:/images/button-focus-light.png"
+            />
+    </children>
+
+</component>
