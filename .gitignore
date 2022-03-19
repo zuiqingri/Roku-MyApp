@@ -1,7 +1,6 @@
-
+dist
 .DS_Store
-.out/roku-deploy.zip
+source/config.json
+out/oftv-roku-dev.zip
 oftv-roku-dev.zip
 oftv-roku-dev0.zip
-source/services/config.json
-
